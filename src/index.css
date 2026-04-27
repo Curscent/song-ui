@@ -119,6 +119,26 @@ h3 {
   padding: 48px 20px;
 }
 
+/* Controls row (search + filter) */
+.controls-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 18px;
+}
+.search-box input {
+  min-width: 280px;
+  width: 320px;
+  border-radius: 12px;
+}
+.filter-box select {
+  background: var(--bg-muted);
+  color: var(--mono-1);
+  border: 1px solid var(--border);
+  padding: 8px 10px;
+  border-radius: 8px;
+}
+
 /* --- Form Design --- */
 form {
   background: var(--bg-card);
@@ -236,6 +256,25 @@ button[type="submit"]:active {
   grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
 }
 
+/* Horizontal, YouTube-like card layout for wider screens */
+.songs-container.yt-style .song-card {
+  flex-direction: row;
+  height: 160px;
+}
+.songs-container.yt-style .song-card-artwork {
+  width: 320px;
+  height: 100%;
+  flex: 0 0 320px;
+}
+.songs-container.yt-style .song-card-content {
+  padding: 18px 20px;
+}
+.songs-container.yt-style .yt-player iframe {
+  height: 100%;
+  min-height: 120px;
+}
+.yt-player { margin-top: 8px; }
+
 .song-card {
   background: var(--bg-card);
   border: 1px solid var(--border);
@@ -333,6 +372,8 @@ button[type="submit"]:active {
   border-top: 1px solid var(--border);
 }
 
+.mono-actions { justify-content: flex-end; }
+
 .song-card-link {
   display: inline-flex;
   align-items: center;
@@ -402,6 +443,11 @@ button[type="submit"]:active {
   gap: 8px;
   color: var(--mono-1);
 }
+
+/* Library header */
+.library-header { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:14px }
+.library-header h2 { margin:0 }
+.library-count { color: var(--mono-2); font-weight:600 }
 
 .theme-toggle:hover {
   background: var(--bg-tertiary);
@@ -479,4 +525,19 @@ button[type="submit"]:active {
   .layout {
     padding: 30px 16px;
   }
+  .controls-row { flex-direction: column; align-items: stretch }
+  .search-box input { width: 100%; min-width: auto }
+}
+
+/* Light theme: improve contrast and readability */
+[data-theme="light"] {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f7f7f8;
+  --bg-card: #ffffff;
+  --bg-muted: #f1f3f5;
+  --mono-1: #0b1220; /* dark text */
+  --mono-2: #374151; /* secondary */
+  --mono-3: #6b7280;
+  --border: #e6e7eb;
+  --soft-shadow: 0 8px 20px rgba(10,10,10,0.06);
 }
