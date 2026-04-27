@@ -39,7 +39,10 @@ export default function SongCard({ song, onDelete, onPlay }: SongCardProps) {
 
         {/* Play button opens the central player; ensure it's on top and clickable */}
         {ytId && (
-          <button className="art-play" onClick={() => onPlay?.(ytId, song.title)} aria-label="Play">▶</button>
+          <>
+            <button className="art-play" onClick={() => onPlay?.(ytId, song.title)} aria-label="Play">▶</button>
+            <button className="art-delete" onClick={() => onDelete(song.id!)} aria-label="Remove">✕</button>
+          </>
         )}
       </div>
 

@@ -356,6 +356,22 @@ button[type="submit"]:active {
   justify-content: center;
 }
 
+.art-delete {
+  position: absolute;
+  right: 12px;
+  top: 12px;
+  z-index: 6;
+  background: rgba(0,0,0,0.6);
+  border: 1px solid rgba(255,255,255,0.04);
+  color: var(--mono-1);
+  padding: 6px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.song-card-artwork { position: relative; }
+.art-play { right: 12px; bottom: 12px; position: absolute; }
+
 .song-card-artwork::after {
   content: '';
   position: absolute;
@@ -413,6 +429,25 @@ button[type="submit"]:active {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+/* Ensure the add-song form fills the same height as the player when in the two-column layout */
+.form-with-player form {
+  margin: 0; /* override centered form styles */
+  max-width: none;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-with-player form > .input-group,
+.form-with-player form > input[type="url"] {
+  /* keep input spacing, but allow the middle area to grow */
+  margin-bottom: 12px;
+}
+
+.form-with-player form button[type="submit"] {
+  margin-top: auto; /* push submit button to the bottom so form matches player height */
 }
 
 .player-inner iframe {
