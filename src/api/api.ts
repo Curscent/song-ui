@@ -1,5 +1,5 @@
 import type { Song } from './types'; // Pointing to types.ts with mandatory 'type' keyword
-const API_URL = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:8080/pascua/songs';
+const API_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/dizon/songs';
 
 export const getSongs = async (): Promise<Song[]> => {
   const response = await fetch(API_URL);
