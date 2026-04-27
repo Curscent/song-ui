@@ -89,8 +89,11 @@ function App() {
       </div>
 
       <h2>Add to Your Collection</h2>
-      {/* ADD SONG FORM */}
-      <form onSubmit={handleAddSong}>
+      {/* Player + ADD SONG FORM in two-column layout */}
+      <div className="form-with-player">
+        <Player ytId={currentYt.id} title={currentYt.title} />
+        {/* ADD SONG FORM */}
+        <form onSubmit={handleAddSong}>
         <h3>📝 New Song</h3>
         <div className="input-group">
           <input type="text" placeholder="Song Title" required value={newSong.title} onChange={e => setNewSong({...newSong, title: e.target.value})}/>
@@ -106,7 +109,8 @@ function App() {
         </div>
         <input type="url" placeholder="Audio/Video URL (YouTube, Spotify, etc.)" required value={newSong.url} onChange={e => setNewSong({...newSong, url: e.target.value})}/>
         <button type="submit">✨ Add to Library</button>
-      </form>
+        </form>
+      </div>
 
       {loading && <p className="loading-text">🎵 Loading your collection...</p>}
       

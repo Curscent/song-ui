@@ -381,6 +381,54 @@ button[type="submit"]:active {
   line-height: 1.2;
 }
 
+/* Player + Form two-column layout */
+.form-with-player {
+  display: grid;
+  grid-template-columns: 420px 1fr;
+  gap: 24px;
+  align-items: start;
+  margin-bottom: 28px;
+}
+
+.player-area {
+  width: 100%;
+  background: var(--bg-muted);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px;
+  box-shadow: var(--soft-shadow);
+}
+
+.player-inner {
+  width: 100%;
+  aspect-ratio: 16/9;
+  background: #000;
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.player-inner iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.player-placeholder {
+  color: var(--mono-2);
+  font-size: 1rem;
+  text-align: center;
+  padding: 18px;
+  width: 100%;
+}
+
+@media (max-width: 880px) {
+  .form-with-player { grid-template-columns: 1fr; }
+  .player-area { order: 0; margin-bottom: 12px; }
+}
+
 .song-card-meta {
   display: flex;
   flex-direction: column;
