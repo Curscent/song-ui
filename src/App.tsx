@@ -123,7 +123,6 @@ function App() {
 
       {!loading && !error && (
         <>
-          <Player ytId={currentYt.id} title={currentYt.title} preview={preview} onClose={() => { setCurrentYt({ id: null }); }} />
           <SongGrid songs={filteredSongs} onDelete={handleDelete} onPlay={(ytId, title) => { setCurrentYt({ id: ytId, title }); setPreview({ id: ytId, title }); }} />
         </>
       )}
