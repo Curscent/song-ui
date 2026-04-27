@@ -51,6 +51,7 @@ function App() {
   }, [songs, searchTerm, genreFilter]);
 
   const [currentYt, setCurrentYt] = useState<{ id: string | null; title?: string }>(() => ({ id: null }));
+  const [preview, setPreview] = useState<{ id?: string | null; title?: string } | null>(null);
 
   const handleAddSong = async (e: React.FormEvent) => {
     e.preventDefault(); 
@@ -91,7 +92,7 @@ function App() {
       <h2>Add to Your Collection</h2>
       {/* Player + ADD SONG FORM in two-column layout */}
       <div className="form-with-player">
-        <Player ytId={currentYt.id} title={currentYt.title} />
+        <Player ytId={currentYt.id} title={currentYt.title} preview={preview} onClose={() => { setCurrentYt({ id: null }); }} />
         {/* ADD SONG FORM */}
         <form onSubmit={handleAddSong}>
         <h3>📝 New Song</h3>
@@ -122,8 +123,8 @@ function App() {
 
       {!loading && !error && (
         <>
-          <Player ytId={currentYt.id} title={currentYt.title} />
-          <SongGrid songs={filteredSongs} onDelete={handleDelete} onPlay={(ytId, title) => setCurrentYt({ id: ytId, title })} />
+          <Player ytId={currentYt.id} title={currentYt.title} preview={preview} onClose={() => { setCurrentYt({ id: null }); }} />
+          <SongGrid songs={filteredSongs} onDelete={handleDelete} onPlay={(ytId, title) => { setCurrentYt({ id: ytId, title }); setPreview({ id: ytId, title }); }} />
         </>
       )}
     </Layout>
