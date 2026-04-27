@@ -19,13 +19,20 @@ function getYouTubeId(url?: string) {
 }
 
 export default function SongCard({ song, onDelete }: SongCardProps) {
-  const [playing, setPlaying] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
   const ytId = getYouTubeId(song.url);
+  const thumbnail = ytId ? `https://img.youtube.com/vi/${ytId}/hqdefault.jpg` : undefined;
 
   return (
     <div className="song-card card-mono">
-      <div className="song-card-artwork mono-artwork">
+      <div
+        className="song-card-artwork mono-artwork"
+        style={thumbnail ? { backgroundImage: `url(${thumbnail})`, backgroundSize: 'cover', backgroundPosition: 'center' } : undefined}
+        onClick={() => { if (ytId) setModalOpen(true); }}
+        role={ytId ? 'button' : undefined}
+      >
         <div className="art-overlay">♪</div>
+        {ytId && <button className="art-play" onClick={(e) => { e.stopPropagation(); setModalOpen(true); }} aria-label="Play">▶</button>}
       </div>
 
       <div className="song-card-content">
@@ -47,19 +54,8 @@ export default function SongCard({ song, onDelete }: SongCardProps) {
         </div>
 
         {ytId ? (
-          <div className="yt-player">
-            {!playing ? (
-              <button className="play-btn" onClick={() => setPlaying(true)}>▶ Play</button>
-            ) : (
-              <iframe
-                width="100%"
-                height="220"
-                src={`https://www.youtube.com/embed/${ytId}?autoplay=1&rel=0`}
-                title={song.title}
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
-            )}
+          <div className="yt-player-inline">
+            <button className="play-btn" onClick={() => setModalOpen(true)}>▶ Play</button>
           </div>
         ) : (
           song.url && (
@@ -77,6 +73,22 @@ export default function SongCard({ song, onDelete }: SongCardProps) {
             </button>
           )}
         </div>
+
+      {modalOpen && ytId && (
+        <div className="player-modal" role="dialog" aria-modal="true" onClick={() => setModalOpen(false)}>
+          <div className="player-modal-content" onClick={(e) => e.stopPropagation()}>
+            <button className="player-close" onClick={() => setModalOpen(false)} aria-label="Close">✕</button>
+            <iframe
+              width="100%"
+              height="480"
+              src={`https://www.youtube.com/embed/${ytId}?autoplay=1&rel=0`}
+              title={song.title}
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
+          </div>
+        </div>
+      )}
       </div>
     </div>
   );
