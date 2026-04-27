@@ -55,33 +55,35 @@ const Player: FC<PlayerProps> = ({ ytId, title, preview, onClose }) => {
       if (!mounted) return;
 
       const YT = (window as any).YT;
-      if (!playerRef.current) {
-        playerRef.current = new YT.Player(containerRef.current!, {
-          width: '100%',
-          height: '100%',
-          videoId: ytId!,
-          playerVars: { enablejsapi: 1, autoplay: 1, rel: 0 },
-          events: {
-            onReady: () => {
-              setLoading(false);
-              setIsPlaying(true);
-            },
-            onStateChange: (e: any) => {
-              // 1=playing, 2=paused, 0=ended
-              if (e.data === 1) setIsPlaying(true);
-              else setIsPlaying(false);
-            }
-          }
-        });
-      } else {
+      // If a player exists and it's a different video, destroy and recreate to ensure a clean switch.
+      if (playerRef.current) {
         try {
-          playerRef.current.loadVideoById(ytId);
+          // YT player provides a destroy() method
+          playerRef.current.destroy();
         } catch (e) {
-          // fallback: replace iframe src if loadVideo fails
-          const el = containerRef.current?.querySelector('iframe') as HTMLIFrameElement | null;
-          if (el) el.src = `https://www.youtube.com/embed/${ytId}?autoplay=1&enablejsapi=1&rel=0`;
+          // ignore
         }
+        playerRef.current = null;
       }
+
+      // Create a fresh player for the new ytId
+      playerRef.current = new YT.Player(containerRef.current!, {
+        width: '100%',
+        height: '100%',
+        videoId: ytId!,
+        playerVars: { enablejsapi: 1, autoplay: 1, rel: 0 },
+        events: {
+          onReady: () => {
+            setLoading(false);
+            setIsPlaying(true);
+          },
+          onStateChange: (e: any) => {
+            // 1=playing, 2=paused, 0=ended
+            if (e.data === 1) setIsPlaying(true);
+            else setIsPlaying(false);
+          }
+        }
+      });
     });
 
     return () => { mounted = false; };

@@ -382,11 +382,12 @@ button[type="submit"]:active {
 }
 
 /* Player + Form two-column layout */
+
 .form-with-player {
   display: grid;
-  grid-template-columns: 420px 1fr;
+  grid-template-columns: 1fr 1fr; /* equal halves */
   gap: 24px;
-  align-items: start;
+  align-items: stretch; /* make children same height */
   margin-bottom: 28px;
 }
 
@@ -397,11 +398,15 @@ button[type="submit"]:active {
   border-radius: 12px;
   padding: 12px;
   box-shadow: var(--soft-shadow);
+  display: flex;
+  flex-direction: column;
 }
 
 .player-inner {
   width: 100%;
-  aspect-ratio: 16/9;
+  /* fill available space to match form height */
+  flex: 1 1 auto;
+  min-height: 220px;
   background: #000;
   border-radius: 8px;
   overflow: hidden;
