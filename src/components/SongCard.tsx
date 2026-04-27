@@ -24,7 +24,7 @@ export default function SongCard({ song, onDelete, onPlay }: SongCardProps) {
 
   return (
     <div className="song-card card-mono">
-      <div className="song-card-artwork mono-artwork">
+      <div className="song-card-artwork">
         {/* If we have a YouTube id, show the static thumbnail image (non-playing) */}
         {ytId ? (
           <img
