@@ -328,11 +328,41 @@ button[type="submit"]:active {
 
 .song-card-artwork[role="button"]{ cursor:pointer }
 
+/* Thumbnail image inside artwork: cover the area but keep pointer-events off so the play button remains clickable */
+.song-card-artwork img.art-thumb {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  pointer-events: none; /* allow clicks to pass to the play button */
+  z-index: 1;
+}
+
+.mono-artwork .art-overlay {
+  z-index: 1; /* keep decorative overlay below control */
+  pointer-events: none; /* decorative only */
+}
+
+.art-play {
+  z-index: 5; /* ensure play button sits above thumbnail and overlay */
+  pointer-events: auto; /* explicitly enable pointer events on the button */
+  padding: 10px 14px; /* slightly larger hit target */
+  min-width: 44px; /* accessible tap target */
+  min-height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .song-card-artwork::after {
   content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.1), transparent);
+  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.08), transparent);
+  pointer-events: none; /* let clicks pass through */
+  z-index: 2; /* sits above the thumbnail but below the play button */
 }
 
 .song-card-content {

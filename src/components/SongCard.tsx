@@ -25,8 +25,22 @@ export default function SongCard({ song, onDelete, onPlay }: SongCardProps) {
   return (
     <div className="song-card card-mono">
       <div className="song-card-artwork mono-artwork">
-        <div className="art-overlay">♪</div>
-        {ytId && <button className="art-play" onClick={() => onPlay?.(ytId, song.title)} aria-label="Play">▶</button>}
+        {/* If we have a YouTube id, show the static thumbnail image (non-playing) */}
+        {ytId ? (
+          <img
+            className="art-thumb"
+            src={`https://img.youtube.com/vi/${ytId}/hqdefault.jpg`}
+            alt={`${song.title} thumbnail`}
+            loading="lazy"
+          />
+        ) : (
+          <div className="art-overlay">♪</div>
+        )}
+
+        {/* Play button opens the central player; ensure it's on top and clickable */}
+        {ytId && (
+          <button className="art-play" onClick={() => onPlay?.(ytId, song.title)} aria-label="Play">▶</button>
+        )}
       </div>
 
       <div className="song-card-content">
