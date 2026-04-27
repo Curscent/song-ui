@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { Song } from '../api/types';
 
 interface SongCardProps {
@@ -22,6 +22,18 @@ export default function SongCard({ song, onDelete }: SongCardProps) {
   const [modalOpen, setModalOpen] = useState(false);
   const ytId = getYouTubeId(song.url);
   const thumbnail = ytId ? `https://img.youtube.com/vi/${ytId}/hqdefault.jpg` : undefined;
+
+  // Lock background scrolling while modal is open and handle Escape key
+  useEffect(() => {
+    if (modalOpen) {
+      const prev = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+      const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setModalOpen(false); };
+      window.addEventListener('keydown', onKey);
+      return () => { document.body.style.overflow = prev; window.removeEventListener('keydown', onKey); };
+    }
+    return;
+  }, [modalOpen]);
 
   return (
     <div className="song-card card-mono">
@@ -78,14 +90,14 @@ export default function SongCard({ song, onDelete }: SongCardProps) {
         <div className="player-modal" role="dialog" aria-modal="true" onClick={() => setModalOpen(false)}>
           <div className="player-modal-content" onClick={(e) => e.stopPropagation()}>
             <button className="player-close" onClick={() => setModalOpen(false)} aria-label="Close">✕</button>
-            <iframe
-              width="100%"
-              height="480"
-              src={`https://www.youtube.com/embed/${ytId}?autoplay=1&rel=0`}
-              title={song.title}
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            />
+            <div className="player-modal-inner">
+              <iframe
+                src={`https://www.youtube.com/embed/${ytId}?autoplay=1&rel=0`}
+                title={song.title}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+            </div>
           </div>
         </div>
       )}

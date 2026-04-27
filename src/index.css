@@ -337,9 +337,10 @@ button[type="submit"]:active {
 
 .song-card-content {
   padding: 18px;
-  flex: 1;
+  flex: 1 1 auto;
   display: flex;
   flex-direction: column;
+  min-width: 0;
 }
 
 .song-card-title {
@@ -355,12 +356,14 @@ button[type="submit"]:active {
   flex-direction: column;
   gap: 8px;
   margin-bottom: 16px;
-  flex: 1;
+  flex: 1 1 auto;
+  overflow: visible;
 }
 
 .song-card-meta-item {
   color: var(--mono-2);
-  font-size: 0.9rem;
+  font-size: 0.95rem;
+  word-break: break-word;
 }
 
 .song-card-meta-label {
@@ -455,8 +458,24 @@ button[type="submit"]:active {
 .player-modal {
   position: fixed; inset: 0; display:flex; align-items:center; justify-content:center; background: rgba(0,0,0,0.6); z-index:9999; animation: modalFade 0.18s ease;
 }
-.player-modal-content { width: min(1000px, 92%); background: var(--bg-card); border-radius: 10px; overflow:hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.6); position:relative; transform:translateY(10px); animation: modalSlide 0.2s ease }
+.player-modal-content {
+  width: min(1000px, 92%);
+  background: var(--bg-card);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+  position: relative;
+  transform: translateY(10px);
+  animation: modalSlide 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 .player-close { position:absolute; right:12px; top:12px; background:transparent; border:none; color:var(--mono-1); font-size:1.1rem; cursor:pointer }
+
+/* responsive iframe wrapper inside modal */
+.player-modal-inner { width: 100%; max-width: 1000px; aspect-ratio: 16/9; background: black }
+.player-modal-inner iframe { width:100%; height:100%; border:0; display:block }
 
 @keyframes modalFade { from { opacity:0 } to { opacity:1 } }
 @keyframes modalSlide { from { transform:translateY(30px) } to { transform:translateY(0) } }
