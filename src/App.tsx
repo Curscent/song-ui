@@ -3,6 +3,7 @@ import { getSongs, addSong, deleteSong } from './api/api';
 import type { Song } from './api/types';
 import Layout from './components/Layout';
 import SongGrid from './components/SongGrid';
+import Player from './components/Player';
 
 function App() {
   const [songs, setSongs] = useState<Song[]>([]);
@@ -48,6 +49,8 @@ function App() {
       return matchesQ && matchesGenre;
     });
   }, [songs, searchTerm, genreFilter]);
+
+  const [currentYt, setCurrentYt] = useState<{ id: string | null; title?: string }>(() => ({ id: null }));
 
   const handleAddSong = async (e: React.FormEvent) => {
     e.preventDefault(); 
@@ -114,7 +117,10 @@ function App() {
       )}
 
       {!loading && !error && (
-        <SongGrid songs={filteredSongs} onDelete={handleDelete} />
+        <>
+          <Player ytId={currentYt.id} title={currentYt.title} />
+          <SongGrid songs={filteredSongs} onDelete={handleDelete} onPlay={(ytId, title) => setCurrentYt({ id: ytId, title })} />
+        </>
       )}
     </Layout>
   );

@@ -1,9 +1,10 @@
-import { useState, useEffect } from 'react';
+import type { } from 'react';
 import type { Song } from '../api/types';
 
 interface SongCardProps {
   song: Song;
   onDelete: (id: number) => void;
+  onPlay?: (ytId: string | null, title?: string) => void;
 }
 
 function getYouTubeId(url?: string) {
@@ -18,42 +19,14 @@ function getYouTubeId(url?: string) {
   return null;
 }
 
-export default function SongCard({ song, onDelete }: SongCardProps) {
-  const [modalOpen, setModalOpen] = useState(false);
-  const [ignoreBackdrop, setIgnoreBackdrop] = useState(false);
+export default function SongCard({ song, onDelete, onPlay }: SongCardProps) {
   const ytId = getYouTubeId(song.url);
-  const thumbnail = ytId ? `https://img.youtube.com/vi/${ytId}/hqdefault.jpg` : undefined;
-
-  // Lock background scrolling while modal is open and handle Escape key
-  useEffect(() => {
-    let timeoutId: ReturnType<typeof setTimeout> | null = null;
-    if (modalOpen) {
-      const prev = document.body.style.overflow;
-      document.body.style.overflow = 'hidden';
-      const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setModalOpen(false); };
-      window.addEventListener('keydown', onKey);
-      // ignore backdrop clicks briefly to avoid accidental closes on open
-      setIgnoreBackdrop(true);
-      timeoutId = setTimeout(() => setIgnoreBackdrop(false), 250);
-      return () => {
-        document.body.style.overflow = prev;
-        window.removeEventListener('keydown', onKey);
-        if (timeoutId) clearTimeout(timeoutId);
-      };
-    }
-    return undefined;
-  }, [modalOpen]);
 
   return (
     <div className="song-card card-mono">
-      <div
-        className="song-card-artwork mono-artwork"
-        style={thumbnail ? { backgroundImage: `url(${thumbnail})`, backgroundSize: 'cover', backgroundPosition: 'center' } : undefined}
-        onClick={() => { if (ytId) setModalOpen(true); }}
-        role={ytId ? 'button' : undefined}
-      >
+      <div className="song-card-artwork mono-artwork">
         <div className="art-overlay">♪</div>
-        {ytId && <button className="art-play" onClick={(e) => { e.stopPropagation(); setModalOpen(true); }} aria-label="Play">▶</button>}
+        {ytId && <button className="art-play" onClick={() => onPlay?.(ytId, song.title)} aria-label="Play">▶</button>}
       </div>
 
       <div className="song-card-content">
@@ -76,7 +49,7 @@ export default function SongCard({ song, onDelete }: SongCardProps) {
 
         {ytId ? (
           <div className="yt-player-inline">
-            <button className="play-btn" onClick={() => setModalOpen(true)}>▶ Play</button>
+            <button className="play-btn" onClick={() => onPlay?.(ytId, song.title)}>▶ Play</button>
           </div>
         ) : (
           song.url && (
@@ -94,26 +67,6 @@ export default function SongCard({ song, onDelete }: SongCardProps) {
             </button>
           )}
         </div>
-
-      {modalOpen && ytId && (
-        <div className="player-modal" role="dialog" aria-modal="true" onClick={(e) => {
-          // only close when clicking the backdrop itself and after the ignore window
-          if (ignoreBackdrop) return;
-          if (e.target === e.currentTarget) setModalOpen(false);
-        }}>
-          <div className="player-modal-content" onClick={(e) => e.stopPropagation()}>
-            <button className="player-close" onClick={() => setModalOpen(false)} aria-label="Close">✕</button>
-            <div className="player-modal-inner">
-              <iframe
-                src={`https://www.youtube.com/embed/${ytId}?autoplay=1&rel=0`}
-                title={song.title}
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
-            </div>
-          </div>
-        </div>
-      )}
       </div>
     </div>
   );

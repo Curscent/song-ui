@@ -4,9 +4,10 @@ import SongCard from './SongCard';
 interface SongGridProps {
   songs: Song[];
   onDelete: (id: number) => void;
+  onPlay?: (ytId: string | null, title?: string) => void;
 }
 
-export default function SongGrid({ songs, onDelete }: SongGridProps) {
+export default function SongGrid({ songs, onDelete, onPlay }: SongGridProps) {
   if (songs.length === 0) {
     return (
       <div className="empty-state">
@@ -26,7 +27,7 @@ export default function SongGrid({ songs, onDelete }: SongGridProps) {
 
       <div className="songs-container yt-style">
         {songs.map((song) => (
-          <SongCard key={song.id} song={song} onDelete={onDelete} />
+          <SongCard key={song.id} song={song} onDelete={onDelete} onPlay={onPlay} />
         ))}
       </div>
     </div>
