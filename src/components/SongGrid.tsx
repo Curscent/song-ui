@@ -19,8 +19,12 @@ export default function SongGrid({ songs, onDelete }: SongGridProps) {
 
   return (
     <div>
-      <h2 style={{ marginBottom: '32px' }}>📚 Your Library ({songs.length})</h2>
-      <div className="songs-container">
+      <div className="library-header">
+        <h2>📚 Your Library</h2>
+        <div className="library-count">{songs.length} items</div>
+      </div>
+
+      <div className="songs-container yt-style">
         {songs.map((song) => (
           <SongCard key={song.id} song={song} onDelete={onDelete} />
         ))}

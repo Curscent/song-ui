@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { getSongs, addSong, deleteSong } from './api/api';
 import type { Song } from './api/types';
 import Layout from './components/Layout';
@@ -6,6 +6,8 @@ import SongGrid from './components/SongGrid';
 
 function App() {
   const [songs, setSongs] = useState<Song[]>([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [genreFilter, setGenreFilter] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -32,6 +34,21 @@ function App() {
     fetchSongs();
   }, []);
 
+  const genres = useMemo(() => {
+    const set = new Set<string>();
+    songs.forEach(s => { if (s.genre) set.add(s.genre); });
+    return Array.from(set).sort();
+  }, [songs]);
+
+  const filteredSongs = useMemo(() => {
+    const q = searchTerm.trim().toLowerCase();
+    return songs.filter(s => {
+      const matchesQ = !q || (s.title + ' ' + s.artist).toLowerCase().includes(q);
+      const matchesGenre = !genreFilter || s.genre === genreFilter;
+      return matchesQ && matchesGenre;
+    });
+  }, [songs, searchTerm, genreFilter]);
+
   const handleAddSong = async (e: React.FormEvent) => {
     e.preventDefault(); 
     try {
@@ -56,8 +73,19 @@ function App() {
 
   return (
     <Layout>
+      <div className="controls-row">
+        <div className="search-box">
+          <input placeholder="Search by title or artist..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} />
+        </div>
+        <div className="filter-box">
+          <select value={genreFilter} onChange={e => setGenreFilter(e.target.value)}>
+            <option value="">All genres</option>
+            {genres.map(g => <option key={g} value={g}>{g}</option>)}
+          </select>
+        </div>
+      </div>
+
       <h2>Add to Your Collection</h2>
-      
       {/* ADD SONG FORM */}
       <form onSubmit={handleAddSong}>
         <h3>📝 New Song</h3>
@@ -86,7 +114,7 @@ function App() {
       )}
 
       {!loading && !error && (
-        <SongGrid songs={songs} onDelete={handleDelete} />
+        <SongGrid songs={filteredSongs} onDelete={handleDelete} />
       )}
     </Layout>
   );

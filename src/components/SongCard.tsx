@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import type { Song } from '../api/types';
 
 interface SongCardProps {
@@ -5,23 +6,31 @@ interface SongCardProps {
   onDelete: (id: number) => void;
 }
 
+function getYouTubeId(url?: string) {
+  if (!url) return null;
+  try {
+    const u = new URL(url);
+    if (u.hostname.includes('youtube.com')) return u.searchParams.get('v');
+    if (u.hostname.includes('youtu.be')) return u.pathname.slice(1);
+  } catch (e) {
+    return null;
+  }
+  return null;
+}
+
 export default function SongCard({ song, onDelete }: SongCardProps) {
-  // Generate a color gradient based on song id for variety
-  const hues = ['180', '240', '320', '0', '40', '100'];
-  const hue = hues[Math.abs((song.id || 0) % hues.length)];
-  const gradientStyle = {
-    background: `linear-gradient(135deg, hsl(${hue}, 70%, 40%) 0%, hsl(${hue}, 60%, 55%) 100%)`
-  };
+  const [playing, setPlaying] = useState(false);
+  const ytId = getYouTubeId(song.url);
 
   return (
-    <div className="song-card">
-      <div className="song-card-artwork" style={gradientStyle}>
-        🎵
+    <div className="song-card card-mono">
+      <div className="song-card-artwork mono-artwork">
+        <div className="art-overlay">♪</div>
       </div>
-      
+
       <div className="song-card-content">
         <h3 className="song-card-title">{song.title}</h3>
-        
+
         <div className="song-card-meta">
           <div>
             <div className="song-card-meta-label">Artist</div>
@@ -37,23 +46,34 @@ export default function SongCard({ song, onDelete }: SongCardProps) {
           </div>
         </div>
 
-        <div className="song-card-actions">
-          {song.url && (
-            <a 
-              href={song.url} 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className="song-card-link"
-            >
-              🎧 Listen
-            </a>
-          )}
+        {ytId ? (
+          <div className="yt-player">
+            {!playing ? (
+              <button className="play-btn" onClick={() => setPlaying(true)}>▶ Play</button>
+            ) : (
+              <iframe
+                width="100%"
+                height="220"
+                src={`https://www.youtube.com/embed/${ytId}?autoplay=1&rel=0`}
+                title={song.title}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+            )}
+          </div>
+        ) : (
+          song.url && (
+            <a href={song.url} target="_blank" rel="noopener noreferrer" className="song-card-link">🎧 Open</a>
+          )
+        )}
+
+        <div className="song-card-actions mono-actions">
           {song.id && (
             <button 
               onClick={() => onDelete(song.id!)}
               className="song-card-delete"
             >
-              🗑️ Remove
+              Remove
             </button>
           )}
         </div>
