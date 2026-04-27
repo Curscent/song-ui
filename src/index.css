@@ -10,6 +10,10 @@
   --mono-2: #bfbfbf; /* secondary text */
   --mono-3: #8f8f8f; /* tertiary text */
   --border: #1f1f1f;
+  /* Royal blue accents */
+  --accent-primary: #4169E1; /* royal blue */
+  --accent-secondary: #6ea0ff; /* light royal */
+  --accent-bright: #60a5fa; /* bright blue */
   --soft-shadow: 0 8px 20px rgba(0,0,0,0.6);
   --glass: rgba(255,255,255,0.02);
 }
@@ -181,7 +185,7 @@ input:focus {
   outline: none;
   border-color: var(--accent-primary);
   background: var(--bg-tertiary);
-  box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.1);
+  box-shadow: 0 0 0 3px rgba(65, 105, 225, 0.12);
 }
 
 input[type="url"],
@@ -190,10 +194,10 @@ button[type="submit"] {
 }
 
 button[type="submit"] {
-  background: linear-gradient(90deg, #3a3a3a, #2b2b2b);
-  color: var(--mono-1);
+  background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
+  color: white;
   font-weight: 600;
-  border: 1px solid rgba(255,255,255,0.02);
+  border: none;
   padding: 12px 20px;
   border-radius: 10px;
   cursor: pointer;
@@ -202,8 +206,8 @@ button[type="submit"] {
 
 button[type="submit"]:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(167, 139, 250, 0.4);
-  filter: brightness(1.1);
+  box-shadow: 0 8px 20px rgba(65, 105, 225, 0.35);
+  filter: brightness(1.05);
 }
 
 button[type="submit"]:active {
@@ -300,13 +304,13 @@ button[type="submit"]:active {
 .song-card:hover {
   transform: translateY(-8px);
   border-color: var(--accent-primary);
-  box-shadow: 0 20px 40px rgba(167, 139, 250, 0.2);
+  box-shadow: 0 20px 40px rgba(65, 105, 225, 0.22);
 }
 
 .song-card-artwork {
   width: 100%;
   height: 220px;
-  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.15));
+  background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -376,7 +380,7 @@ button[type="submit"]:active {
   content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.08), transparent);
+  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.06), transparent);
   pointer-events: none; /* let clicks pass through */
   z-index: 2; /* sits above the thumbnail but below the play button */
 }
